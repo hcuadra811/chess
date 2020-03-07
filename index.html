@@ -7,11 +7,186 @@
     <title>MFing CHESS</title>
     <meta name="description" content="The HTML5 Herald" />
     <meta name="author" content="SitePoint" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Oxanium:200,300,400,500,600,700,800&display=swap"
+      rel="stylesheet"
+    />
 
     <link rel="stylesheet" href="css/style.css?v=0.1" />
   </head>
 
   <body>
+    <div class="container">
+      <div class="header">
+        <h1>Chess for Hackers</h1>
+        <div class="scoreboard">
+          <div class="score white">
+            <i class="fas fa-chess-king"></i>
+            <span class="number">4</span>
+          </div>
+          <div class="score black">
+            <i class="fas fa-chess-king"></i>
+            <span class="number">5</span>
+          </div>
+        </div>
+      </div>
+      <div class="board">
+        <div class="row">
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-rook"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-knight"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-bishop"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-queen"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-king"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-bishop"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-knight"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-rook"></i>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn"></i>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+        </div>
+        <div class="row">
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+        </div>
+        <div class="row">
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+        </div>
+        <div class="row">
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+          <div class="cell black" x="" y="" piece_id="0"></div>
+          <div class="cell" x="" y="" piece_id="0"></div>
+        </div>
+        <div class="row">
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn white"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn white"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn white"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn white"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn white"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn white"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn white"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-pawn white"></i>
+          </div>
+        </div>
+        <div class="row">
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-rook white"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-knight white"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-bishop white"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-queen white"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-king white"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-bishop white"></i>
+          </div>
+          <div class="cell black" x="" y="" piece_id="0">
+            <i class="fas fa-chess-knight white"></i>
+          </div>
+          <div class="cell" x="" y="" piece_id="0">
+            <i class="fas fa-chess-rook white"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
     <script src="js/chess.js"></script>
   </body>
 </html>
