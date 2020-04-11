@@ -94,8 +94,8 @@ class Board {
             for(let movePattern of piece.movePattern) {
                 const dX = piece.x + movePattern[0]
                 const dY = piece.y + movePattern[1]
-
-                if(this.inRange(dX) && this.inRange(dY)) {
+                if(this.inRange(dX) && this.inRange(dY)) {                   
+                    if(this.isOwnPiece(piece,dX,dY)) continue
                     if(this.legalMove(piece,dX,dY)) {
                         piece.addMove([dX,dY])
                     }
@@ -112,6 +112,9 @@ class Board {
             let dY = piece.y + advanceY
 
             while(this.inRange(dX) && this.inRange(dY)) {
+                
+                if(this.isOwnPiece(piece,dX,dY)) break
+                
                 if(this.legalMove(piece,dX,dY)) {
                     piece.addMove([dX,dY])
                     
@@ -132,10 +135,14 @@ class Board {
         return slot.isEmpty() ? false : slot.piece.color !== piece.color
     }
 
-    legalMove(piece,dX,dY) {
+    isOwnPiece(piece,dX,dY) {
         const slot = this.slots[dX + dY * this.MAX] 
         
-        return slot.isEmpty() ? true : slot.piece.color !== piece.color
+        return slot.isEmpty() ? false : slot.piece.color === piece.color
+    }
+
+    legalMove(piece,dX,dY) {
+        return true
     }
 
     inRange(value) {
