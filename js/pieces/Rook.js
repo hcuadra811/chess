@@ -9,6 +9,10 @@ class Rook extends Piece {
         this.value = 5
     }
 
+    markup() {
+        return `<i class="fas fa-chess-rook ${c.COLORSTR[this.color]}"></i>`
+    }
+
     get movePattern() {
         return [ 
             [-1,0],[0,1],[0,-1],[1,0]

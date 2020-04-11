@@ -9,6 +9,10 @@ class Knight extends Piece {
         this.value = 3
     }
 
+    markup() {
+        return `<i class="fas fa-chess-knight ${c.COLORSTR[this.color]}"></i>`
+    }
+
     get movePattern() {
         return [
             [1,2],[1,-2], 
@@ -16,10 +20,6 @@ class Knight extends Piece {
             [2,1],[2,-1],
             [-2,1],[-2,-1]
         ]
-    }
-
-    markup() {
-        return `<i class="black fas fa-chess-knight ${c.COLORSTR[this.color]}"></i>`
     }
 }
 

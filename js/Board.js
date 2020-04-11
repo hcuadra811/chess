@@ -96,14 +96,38 @@ class Board {
         if(piece.longRange) {
             this.calculateLongRangeMoves(piece)
         } else {
-            for(let movePattern of piece.movePattern) {
-                const dX = piece.x + movePattern[0]
-                const dY = piece.y + movePattern[1]
-                if(this.inRange(dX) && this.inRange(dY)) {                   
-                    if(this.isOwnPiece(piece,dX,dY)) continue
-                    if(this.legalMove(piece,dX,dY)) {
-                        piece.addMove([dX,dY])
-                    }
+            this.calculateShortRangeMoves(piece)
+        }
+
+        if(piece.hasCaptureMoves()) {
+            this.calculateCaptureMoves(piece)
+        }
+    }
+
+    calculateCaptureMoves(piece) {
+        for(let movePattern of piece.captureMoves) {
+            const dX = piece.x + movePattern[0]
+            const dY = piece.y + movePattern[1]
+            if(this.inRange(dX) && this.inRange(dY)) { 
+                if(this.isOpponentPiece(piece,dX,dY)) {
+                    piece.addMove([dX,dY])
+                }
+            }
+        }
+    }
+
+    calculateShortRangeMoves(piece) {
+        const pieceMoves = piece
+        for(let movePattern of piece.movePattern) {
+            const dX = piece.x + movePattern[0]
+            const dY = piece.y + movePattern[1]
+            if(this.inRange(dX) && this.inRange(dY)) {                   
+                if( this.isOwnPiece(piece,dX,dY) || 
+                    (this.isOpponentPiece(piece,dX,dY) && piece.hasCaptureMoves())
+                 ) continue
+
+                if(this.legalMove(piece,dX,dY)) {
+                    piece.addMove([dX,dY])
                 }
             }
         }

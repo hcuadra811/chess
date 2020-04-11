@@ -7,6 +7,10 @@ class King extends Piece {
         this.name = 'King'
     }
 
+    markup() {
+        return `<i class="fas fa-chess-king ${c.COLORSTR[this.color]}"></i>`
+    }
+
     get movePattern() {
         return [ 
             [-1,-1],[-1,0],[-1,1],
@@ -14,12 +18,6 @@ class King extends Piece {
             [1,-1], [1,0],[1,1]
         ]
     }
-
-    markup() {
-        return `<i class="black fas fa-chess-king ${c.COLORSTR[this.color]}"></i>`
-    }
-
-
 }
 
 export default King

@@ -9,15 +9,15 @@ class Bishop extends Piece {
         this.value = 3
     }
 
+    markup() {
+        return `<i class="fas fa-chess-bishop ${c.COLORSTR[this.color]}"></i>`
+    }
+
     get movePattern() {
         return [ 
             [-1,-1],[-1,1],
             [1,-1], [1,1]
         ]
-    }
-
-    markup() {
-        return `<i class="black fas fa-chess-bishop ${c.COLORSTR[this.color]}"></i>`
     }
 }
 

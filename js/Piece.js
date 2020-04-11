@@ -12,6 +12,7 @@ class Piece {
         this._longRange = false
         this._moved = false
         this._value = 0
+        this._captureMoves = []
     }
 
     addMove(move) {
@@ -26,6 +27,14 @@ class Piece {
         this._moved = true
         this.position.x = x
         this.position.y = y
+    }
+
+    hasCaptureMoves() {
+        return this._captureMoves.length > 0
+    }
+
+    get captureMoves() {
+        return this._captureMoves;
     }
 
     get id() {
@@ -86,6 +95,10 @@ class Piece {
 
     set longRange(longRange) {
         this._longRange = longRange
+    }
+
+    set captureMoves(captureMoves) {
+        this._captureMoves = captureMoves
     }
 }
 

@@ -9,16 +9,16 @@ class Queen extends Piece {
         this.value = 7
     }
 
+    markup() {
+        return `<i class="fas fa-chess-queen ${c.COLORSTR[this.color]}"></i>`
+    }
+
     get movePattern() {
         return [ 
             [-1,-1],[-1,0],[-1,1],
             [0,1], [0,-1],
             [1,-1], [1,0],[1,1]
         ]
-    }
-
-    markup() {
-        return `<i class="black fas fa-chess-queen ${c.COLORSTR[this.color]}"></i>`
     }
 }
 
