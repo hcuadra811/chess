@@ -28,8 +28,9 @@ class Board {
 
     initializeBoard() {   
         this.setEmptySlots()
-        this.setWhitePieces()
-        this.setBlackPieces()
+        this.setInitialPieces(c.WHITE,c.WHITE_INITIAL_ROW,c.WHITE_END_ROW,c.WHITE_PAWN_ROW)
+        this.setInitialPieces(c.BLACK,c.BLACK_INITIAL_ROW,c.BLACK_END_ROW,c.BLACK_PAWN_ROW)
+        this.calculateMoves()
     }
 
     setEmptySlots() {
@@ -40,58 +41,116 @@ class Board {
         }
     }
 
-    getPiece(id) {
+    getPieceSlot(pieceId) {
         for(let slot of this.slots) {
-            const piece = slot.piece
-            if(typeof piece === 'undefined') continue
+            if(slot.isEmpty()) continue
 
-            if(piece.id == id) {
-                return slot.piece
+            if(slot.piece.id == pieceId) {
+                return slot
             }
         }
         return false
     }
 
-    setWhitePieces() {
+    getPiece(pieceId) {
+        return this.getPieceSlot(pieceId).piece
+    }
+
+    setInitialPieces(color,startY,endY,pawnRow) {
         let piece = '';
 
-        for(let y= 0; y < 2; y++) {
+        for(let y= startY; y <= endY; y++) {
             for(let x = 0; x < this.MAX; x++) {
-                piece = y === 0 ? this.pieces[x] : Pawn
-                let slot_position = x + y * this.MAX
-                let current_slot = this.slots[slot_position]
-                let current_piece =  new piece(this.id,c.WHITE,x,y)
-                current_slot.piece = current_piece
+                piece = y === pawnRow ?  Pawn : this.pieces[x]
+                const current_slot = this.slots[x + y * this.MAX]
+                current_slot.piece =  new piece(this.id,color,x,y)
                 this.id++
             }
         }
     }
 
-    setBlackPieces() {
-        let piece = '';
+    move(pieceId,x,y) {
+        const slot = this.getPieceSlot(pieceId)
+        const destinationSlot = this.slots[x + y * this.MAX]
 
-        for(let y= 6; y < this.MAX; y++) {
-            for(let x = 0; x < this.MAX; x++) {
-                piece = y === 6 ?  Pawn : this.pieces[x]
-                let slot_position = x + y * this.MAX
-                let current_slot = this.slots[slot_position]
-                let current_piece =  new piece(this.id,c.BLACK,x,y)
-                current_slot.piece = current_piece
-                this.id++
+        destinationSlot.piece = slot.piece
+        slot.piece.move(x,y)
+        slot.empty()
+        this.calculateMoves()
+    }
+
+    calculateMoves() {
+        for(let slot of this.slots) {
+            if(!slot.isEmpty()) {
+                slot.piece.emptyBlockers()
+                slot.piece.emptyMoves()
+                this.calculateMovesFor(slot.piece)
             }
         }
     }
 
-    move(pieceID,x,y) {
-        const piece = this.getPiece(pieceID)
-        const slotIndex = piece.x + piece.y * this.MAX
-        const slot = this.slots[slotIndex]
+    calculateMovesFor(piece) {    
+        if(piece.longRange) {
+            this.calculateLongRangeMoves(piece)
+        } else {
+            for(let movePattern of piece.movePattern) {
+                const dX = piece.x + movePattern[0]
+                const dY = piece.y + movePattern[1]
 
-        const destinationSlotIndex = x + y * this.MAX
-        const destinationSlot = this.slots[destinationSlotIndex]
+                if(this.inRange(dX) && this.inRange(dY)) {
+                    if(this.blocked(piece,dX,dY)) {
+                        piece.addBlocker([dX,dY])
+                    } else if(this.legalMove(piece,dX,dY)) {
+                        piece.addMove([dX,dY])
+                    }
+                }
+            }
+        }
+    }
 
-        destinationSlot.piece = piece
-        slot.emptySlot()
+    calculateLongRangeMoves(piece) {
+        for(let movePattern of piece.movePattern) { 
+            const advanceX = movePattern[0]
+            const advanceY = movePattern[1]     
+            let dX = piece.x + advanceX
+            let dY = piece.y + advanceY
+
+            while(this.inRange(dX) && this.inRange(dY)) {
+                if(this.blocked(piece,dX,dY)) {
+                    piece.addBlocker([dX,dY])
+                    break;
+                } else if(this.legalMove(piece,dX,dY)) {
+                    piece.addMove([dX,dY])
+                    
+                    if(this.isOpponentPiece(piece,dX,dY)) {
+                        break
+                    }
+                }
+                dX += advanceX
+                dY += advanceY
+            }
+        }
+    }
+    
+
+    isOpponentPiece(piece,dX,dY) {
+        const slot = this.slots[dX + dY * this.MAX] 
+        
+        return slot.isEmpty() ? false : slot.piece.color !== piece.color
+    }
+
+    blocked(piece,dX,dY) {
+        const slot = this.slots[dX + dY * this.MAX] 
+        
+        return slot.isEmpty() ? false : slot.piece.color === piece.color
+    }
+
+    legalMove(piece,dX,dY) {
+        return true
+    }
+
+    inRange(value) {
+        return value >= 0 && value < this.MAX
     }
 }
 

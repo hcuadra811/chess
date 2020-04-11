@@ -26,7 +26,7 @@ class Slot {
         return this._empty
     }
 
-    emptySlot() {
+    empty() {
         this._piece = {}
         this._empty = true
     }

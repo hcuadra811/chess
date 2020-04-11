@@ -5,7 +5,6 @@ class Chess {
 
   constructor() {
     this._board = new Board()
-    console.log(this._board)
     this._score = [0,0]
     this._turn = c.WHITE
     this._lastID = 0
@@ -25,6 +24,11 @@ class Chess {
 
   movePiece(x,y) {
     this._board.move(this._lastID,x,y)
+    this._turn = this._turn === c.WHITE ? c.BLACK:c.WHITE
+  }
+
+  get turnName() {
+    return c.COLORSTR[this._turn]
   }
 
   get score() {

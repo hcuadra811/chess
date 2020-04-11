@@ -12,6 +12,7 @@ $(".cell").click(function() {
         const lastPosition = $('div[piece_id='+chess.lastID+']')
 
         lastPosition.html('')
+        lastPosition.attr('piece_id','0')
 
         chess.movePiece(x,y)
 
@@ -20,14 +21,17 @@ $(".cell").click(function() {
         )
 
         $(this).removeClass('target-move')
+        $(this).attr('piece_id',chess.lastID)
 
-        eraseHightlights()
+        eraseHighlights()
+        changeTurn()
 
     } else {    
         const wasExpanded = $(this).hasClass('expanded')
         const isTurn = $('svg',this).hasClass('turn') 
 
         $(".cell").removeClass("expanded")
+        eraseHighlights()
 
         if(!wasExpanded && isTurn) {
             $(this).addClass("expanded")
@@ -38,20 +42,30 @@ $(".cell").click(function() {
     }
 })
 
+function changeTurn() {
+    const turn = chess.turnName
+    $('.turn').removeClass('turn')
+    $('svg.'+turn).addClass('turn')
+    $('.arrow').html('')
+    $('.arrow-'+turn).html(
+        '<i class="fas fa-chevron-up"></i>'
+    )
+}
+
 function highlightMoves(moves) {
     for(let move of moves) {
         const x = move[0]
         const y = move[1]
         const targetMove = $('div[x='+x+'][y='+y+']')
-        targetMove.html(
+        targetMove.append(
             '<i class="fas fa-circle"></i>'
         )
         targetMove.addClass('target-move')
     }
 }
 
-function eraseHightlights() {  
-    $('.target-move').html('')
+function eraseHighlights() {  
+    $('.fa-circle').remove()
     $('.target-move').removeClass('target-move')
     $(".cell").removeClass("expanded")
 

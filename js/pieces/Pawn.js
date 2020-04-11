@@ -4,22 +4,16 @@ import * as c from '../constants/index.js'
 class Pawn extends Piece {
     constructor(id,color,x,y,board) {
         super(id,color,x,y)
-        this._name = 'Pawn'
-        this._moves = this.initialMoves()
+        this.name = 'Pawn'
+        this.value = 1
     }
 
-    initialMoves() {
-        if(this.color === c.WHITE) {
-            return [
-                [this.x,this.y+1],
-                [this.x,this.y+2]
-            ]
-        } else {
-            return [
-                [this.x,this.y-1],
-                [this.x,this.y-2]
-            ]
+    get movePattern() {
+        let pattern = [[0, 1 * this.direction]]
+        if(!this._moved) {
+            pattern.push([0,2 * this.direction])
         }
+        return pattern
     }
 
     markup() {
