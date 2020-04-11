@@ -10,21 +10,12 @@ class Piece {
         this._moves = []
         this._direction = this._color === c.WHITE ? 1:-1;
         this._longRange = false
-        this._blockers = []
         this._moved = false
         this._value = 0
     }
 
-    addBlocker(move) {
-        this._blockers.push(move)
-    }
-
     addMove(move) {
         this._moves.push(move)
-    }
-
-    emptyBlockers() {
-        this._blockers = []
     }
 
     emptyMoves() {
@@ -55,10 +46,6 @@ class Piece {
 
     get moves() {
         return this._moves
-    }
-
-    get blockers() {
-        return this._blockers
     }
 
     get x() {

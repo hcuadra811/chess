@@ -1,5 +1,4 @@
 import Slot from './Slot.js'
-import Piece from './Piece.js'
 import Rook from './pieces/Rook.js'
 import Knight from './pieces/Knight.js'
 import Bishop from './pieces/Bishop.js'
@@ -82,7 +81,6 @@ class Board {
     calculateMoves() {
         for(let slot of this.slots) {
             if(!slot.isEmpty()) {
-                slot.piece.emptyBlockers()
                 slot.piece.emptyMoves()
                 this.calculateMovesFor(slot.piece)
             }
@@ -98,9 +96,7 @@ class Board {
                 const dY = piece.y + movePattern[1]
 
                 if(this.inRange(dX) && this.inRange(dY)) {
-                    if(this.blocked(piece,dX,dY)) {
-                        piece.addBlocker([dX,dY])
-                    } else if(this.legalMove(piece,dX,dY)) {
+                    if(this.legalMove(piece,dX,dY)) {
                         piece.addMove([dX,dY])
                     }
                 }
@@ -116,10 +112,7 @@ class Board {
             let dY = piece.y + advanceY
 
             while(this.inRange(dX) && this.inRange(dY)) {
-                if(this.blocked(piece,dX,dY)) {
-                    piece.addBlocker([dX,dY])
-                    break;
-                } else if(this.legalMove(piece,dX,dY)) {
+                if(this.legalMove(piece,dX,dY)) {
                     piece.addMove([dX,dY])
                     
                     if(this.isOpponentPiece(piece,dX,dY)) {
@@ -139,14 +132,10 @@ class Board {
         return slot.isEmpty() ? false : slot.piece.color !== piece.color
     }
 
-    blocked(piece,dX,dY) {
+    legalMove(piece,dX,dY) {
         const slot = this.slots[dX + dY * this.MAX] 
         
-        return slot.isEmpty() ? false : slot.piece.color === piece.color
-    }
-
-    legalMove(piece,dX,dY) {
-        return true
+        return slot.isEmpty() ? true : slot.piece.color !== piece.color
     }
 
     inRange(value) {
