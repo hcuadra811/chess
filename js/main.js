@@ -23,6 +23,7 @@ $(".cell").click(function() {
         $(this).removeClass('target-move')
         $(this).attr('piece_id',chess.lastID)
 
+        updateScore()
         eraseHighlights()
         changeTurn()
 
@@ -41,6 +42,14 @@ $(".cell").click(function() {
         }
     }
 })
+
+function updateScore() {
+    const score = chess.score
+    console.log(score)
+    $('.score.white .number').html(score[0])
+    $('.score.black .number').html(score[1])
+    
+}
 
 function changeTurn() {
     const turn = chess.turnName

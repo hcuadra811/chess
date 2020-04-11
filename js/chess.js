@@ -23,8 +23,13 @@ class Chess {
   }
 
   movePiece(x,y) {
-    this._board.move(this._lastID,x,y)
+    const pieceValue = this._board.move(this._lastID,x,y)
+    this.updateScore(pieceValue)
     this._turn = this._turn === c.WHITE ? c.BLACK:c.WHITE
+  }
+
+  updateScore(pieceValue) {
+    this._score[this._turn] += pieceValue
   }
 
   get turnName() {

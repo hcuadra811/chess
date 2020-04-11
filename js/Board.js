@@ -71,11 +71,16 @@ class Board {
     move(pieceId,x,y) {
         const slot = this.getPieceSlot(pieceId)
         const destinationSlot = this.slots[x + y * this.MAX]
-
+        let capturedPiece = 0
+        if(!destinationSlot.isEmpty()) {
+            capturedPiece = destinationSlot.piece.value
+        }
         destinationSlot.piece = slot.piece
         slot.piece.move(x,y)
         slot.empty()
         this.calculateMoves()
+
+        return capturedPiece
     }
 
     calculateMoves() {
