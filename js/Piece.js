@@ -6,6 +6,7 @@ class Piece {
         this._id = id
         this._color = color
         this._position = new Position(x,y)
+        this._moves = []
     }
 
     get id() {
@@ -22,6 +23,18 @@ class Piece {
 
     get name() {
         return this._name
+    }
+
+    get moves() {
+        return this._moves
+    }
+
+    get x() {
+        return this._position.x
+    }
+
+    get y() {
+        return this._position.y
     }
 }
 

@@ -9,6 +9,7 @@ import Pawn from './pieces/Pawn.js'
 import * as c from './constants/index.js'
 
 class Board {
+    id = 1
     MAX = 8
     slots = []
     pieces = [
@@ -27,8 +28,8 @@ class Board {
 
     initializeBoard() {   
         this.setEmptySlots()
-        this.setWhitePieces();
-        this.setBlackPieces();
+        this.setWhitePieces()
+        this.setBlackPieces()
     }
 
     setEmptySlots() {
@@ -37,6 +38,18 @@ class Board {
                 this.slots.push(new Slot(x,y))
             }
         }
+    }
+
+    getPiece(id) {
+        for(let slot of this.slots) {
+            const piece = slot.piece
+            if(typeof piece === 'undefined') continue
+
+            if(piece.id == id) {
+                return slot.piece
+            }
+        }
+        return false
     }
 
     setWhitePieces() {
@@ -55,18 +68,30 @@ class Board {
     }
 
     setBlackPieces() {
-        let name = '';
+        let piece = '';
 
         for(let y= 6; y < this.MAX; y++) {
             for(let x = 0; x < this.MAX; x++) {
-                name = y === 6 ?  'Pawn' : this.pieces[x];
+                piece = y === 6 ?  Pawn : this.pieces[x]
                 let slot_position = x + y * this.MAX
                 let current_slot = this.slots[slot_position]
-                let current_piece =  new Piece(this.id,name,c.BLACK,x,y)
+                let current_piece =  new piece(this.id,c.BLACK,x,y)
                 current_slot.piece = current_piece
                 this.id++
             }
         }
+    }
+
+    move(pieceID,x,y) {
+        const piece = this.getPiece(pieceID)
+        const slotIndex = piece.x + piece.y * this.MAX
+        const slot = this.slots[slotIndex]
+
+        const destinationSlotIndex = x + y * this.MAX
+        const destinationSlot = this.slots[destinationSlotIndex]
+
+        destinationSlot.piece = piece
+        slot.emptySlot()
     }
 }
 

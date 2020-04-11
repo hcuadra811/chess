@@ -5,8 +5,26 @@ class Chess {
 
   constructor() {
     this._board = new Board()
+    console.log(this._board)
     this._score = [0,0]
     this._turn = c.WHITE
+    this._lastID = 0
+  }
+
+  getMovesFrom(piece_id) {
+    const piece = this._board.getPiece(piece_id)
+
+    return piece.moves
+  }
+
+  getMarkupForLastPiece() {
+    const piece = this._board.getPiece(this._lastID)
+
+    return piece.markup()
+  }
+
+  movePiece(x,y) {
+    this._board.move(this._lastID,x,y)
   }
 
   get score() {
@@ -19,6 +37,14 @@ class Chess {
 
   get turn() {
     return this._turn
+  }
+
+  get lastID() {
+    return this._lastID
+  }
+
+  set lastID(id) {
+    this._lastID = id
   }
 
 
