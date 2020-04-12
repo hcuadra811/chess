@@ -1,10 +1,10 @@
 import Chess from './Chess.js'
+import * as c from './constants/index.js'
 
 let chess = new Chess()
 
 $(".cell").click(function() {
-    console.log(chess.board);
-
+    console.log(chess.board)
     if($(this).hasClass('target-move')) {
         const x = parseInt($(this).attr('x'))
         const y = parseInt($(this).attr('y'))
@@ -27,6 +27,16 @@ $(".cell").click(function() {
         eraseHighlights()
         changeTurn()
 
+        if(chess.board.isCheckMate()) {
+            const winnerColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
+            let winnerName = c.COLORSTR[winnerColor]
+            //Capitalize first letter
+            winnerName = winnerName.charAt(0).toUpperCase() + winnerName.slice(1)
+            setTimeout(function(){ 
+                alert(`Check Mate! ${winnerName} wins`)
+            }, 200);
+        }
+
     } else {    
         const wasExpanded = $(this).hasClass('expanded')
         const isTurn = $('svg',this).hasClass('turn') 
@@ -45,7 +55,6 @@ $(".cell").click(function() {
 
 function updateScore() {
     const score = chess.score
-    console.log(score)
     $('.score.white .number').html(score[0])
     $('.score.black .number').html(score[1])
     

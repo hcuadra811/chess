@@ -13,10 +13,19 @@ class Piece {
         this._moved = false
         this._value = 0
         this._captureMoves = []
+        this._blockers = []
     }
 
     addMove(move) {
         this._moves.push(move)
+    }
+
+    addBlocker(move) {
+        this._blockers.push(move)
+    }
+
+    emptyBlockers() {
+        this._blockers = []
     }
 
     emptyMoves() {
@@ -31,6 +40,10 @@ class Piece {
 
     hasCaptureMoves() {
         return this._captureMoves.length > 0
+    }
+
+    get blockers() {
+        return this._blockers
     }
 
     get captureMoves() {
@@ -87,6 +100,10 @@ class Piece {
 
     set name(name) {
         this._name = name
+    }
+
+    set moves(moves) {
+        this._moves = moves
     }
 
     set board(board) {

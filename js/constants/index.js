@@ -1,6 +1,7 @@
 export const WHITE = 0
 export const BLACK = 1
 export const COLORSTR = ['white','black']
+export const KINGIDS = [5,29]
 
 export const WHITE_PAWN_ROW = 1
 export const WHITE_INITIAL_ROW = 0
