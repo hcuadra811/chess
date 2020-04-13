@@ -25,6 +25,7 @@ class Board {
     _pieces = [{},{}]
     
     _cancelMovesFor = []
+    _additionalMove = []
     
     constructor() {
         this.initializeBoard()
@@ -83,6 +84,8 @@ class Board {
     move(pieceId,x,y) {
         const slot = this.getPieceSlot(pieceId)
         const destinationSlot = this.slots[x + y * this.MAX]
+        this._additionalMove = []
+
         let capturedPiece = 0
         if(!destinationSlot.isEmpty()) {
             capturedPiece = destinationSlot.piece.value
@@ -91,7 +94,11 @@ class Board {
         slot.piece.move(x,y)      
         slot.empty()
         this._inCheck = this.isCheck(destinationSlot.piece)
-        this._cancelMovesFor = []
+        this._cancelMovesFor = []    
+
+        if(this.isCastle(slot,destinationSlot)) {
+            this.applyCastle(destinationSlot.piece)
+        }
         
         this.calculateMoves()
 
@@ -100,6 +107,34 @@ class Board {
         } 
 
         return capturedPiece
+    }
+
+    isCastle(slot,destinationSlot) {
+        return  destinationSlot.piece.name === 'King' && Math.abs(slot.x - destinationSlot.x) > 1
+    }
+    
+    applyCastle(king) {
+        let slot 
+        let destinationSlot
+
+        if(king.x > c.KING_INITIAL_X) {
+            const rightRookPosition = king.x + c.KING_ROOK_DISTANCE_RIGHT + king.y * 8
+            slot = this.slots[rightRookPosition]
+            destinationSlot = this.slots[king.x - 1 + king.y * 8]
+            destinationSlot.piece = slot.piece
+            slot.piece.move(king.x - 1, king.y)
+            slot.empty()
+        } else {
+            const leftRookPosition = king.x + c.KING_ROOK_DISTANCE_LEFT + king.y * 8
+            slot = this.slots[leftRookPosition]
+            destinationSlot = this.slots[king.x + 1 + king.y * 8]
+            destinationSlot.piece = slot.piece
+            slot.piece.move(king.x + 1, king.y)
+            slot.empty()
+
+        }
+
+        this._additionalMove = [[slot.x,slot.y],[destinationSlot.x,destinationSlot.y]]
     }
 
     calculateMovesInCheck(threat) {
@@ -185,7 +220,7 @@ class Board {
 
     isCheck(piece) {
         this.calculateMovesForPiece(piece)
-        const opponentKing = this.getPiece(c.KINGIDS[this.opponentColor(piece)])
+        const opponentKing = this._pieces[this.opponentColor(piece)]['King']
 
         return this.containsPosition(piece.moves,opponentKing.x,opponentKing.y)
     }
@@ -283,8 +318,46 @@ class Board {
         }
         
         if(piece.name === 'King') {
+            this.calculateCastle(piece)
             this.movesNotInOpponentPath(piece)
         }
+    }
+
+    calculateCastle(king) {
+        if(!king.moved) {           
+            if(this.slotsAreEmpty(king,2) && this.pieceHasntMoved(king,3)) {
+                king.moves.push([king.x+2,king.y])
+            }    
+
+            if(this.slotsAreEmpty(king,-3) && this.pieceHasntMoved(king,-4)) {
+                king.moves.push([king.x-2,king.y])
+            }
+             
+        }
+    }
+
+    slotsAreEmpty(piece,distance) {
+        const factor = distance > 0 ? 1 : -1
+        let dX = piece.x + factor
+        let slotsAreEmpty = true
+
+        while(dX !== piece.x + distance + factor) {
+            const slot = this.slots[dX + piece.y * 8]
+            slotsAreEmpty = slotsAreEmpty && slot.isEmpty()
+            dX += factor
+        }
+
+        return slotsAreEmpty
+    }
+
+    pieceHasntMoved(piece,distance) {
+        let pieceHasntMoved = false
+        const slot = this.slots[piece.x + distance + piece.y * 8]
+
+        if(!slot.isEmpty()) {
+            pieceHasntMoved = !slot.piece.moved
+        }
+        return pieceHasntMoved
     }
 
     calculateLongRangeMoves(piece) {
@@ -366,6 +439,10 @@ class Board {
 
     isEmptySlot(dX,dY) {
         return this.slots[dX + dY * this.MAX].isEmpty()
+    }
+
+    get additionalMove() {
+        return this._additionalMove
     }
 }
 

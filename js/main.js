@@ -22,20 +22,12 @@ $(".cell").click(function() {
 
         $(this).removeClass('target-move')
         $(this).attr('piece_id',chess.lastID)
-
+        
+        additionalMove()
         updateScore()
         eraseHighlights()
         changeTurn()
-
-        if(chess.board.isCheckMate()) {
-            const winnerColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
-            let winnerName = c.COLORSTR[winnerColor]
-            //Capitalize first letter
-            winnerName = winnerName.charAt(0).toUpperCase() + winnerName.slice(1)
-            setTimeout(function(){ 
-                alert(`Check Mate! ${winnerName} wins`)
-            }, 200);
-        }
+        verifyCheckMate()
 
     } else {    
         const wasExpanded = $(this).hasClass('expanded')
@@ -52,6 +44,39 @@ $(".cell").click(function() {
         }
     }
 })
+
+function additionalMove() {
+    const additionalMove = chess.board.additionalMove
+        
+    if(additionalMove.length > 0) {
+        const slotX = additionalMove[0][0]
+        const slotY = additionalMove[0][1]
+        const dSlotX = additionalMove[1][0]
+        const dSlotY = additionalMove[1][1]
+
+        const slotDiv = $('div[x='+slotX+'][y='+slotY+']')
+        const pieceId = parseInt(slotDiv.attr('piece_id'))
+
+        slotDiv.html('')
+        slotDiv.attr('piece_id',0)
+
+        const dSlotDiv =  $('div[x='+dSlotX+'][y='+dSlotY+']')
+        dSlotDiv.attr('piece_id',pieceId)
+        dSlotDiv.html(chess.getMarkupFor(pieceId))
+    }
+}
+
+function verifyCheckMate() {
+    if(chess.board.isCheckMate()) {
+        const winnerColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
+        let winnerName = c.COLORSTR[winnerColor]
+        //Capitalize first letter
+        winnerName = winnerName.charAt(0).toUpperCase() + winnerName.slice(1)
+        setTimeout(function(){ 
+            alert(`Check Mate! ${winnerName} wins`)
+        }, 200);
+    }
+}
 
 function updateScore() {
     const score = chess.score

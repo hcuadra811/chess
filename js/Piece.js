@@ -87,6 +87,10 @@ class Piece {
         return this._moves
     }
 
+    get moved() {
+        return this._moved
+    }
+
     get x() {
         return this._position.x
     }

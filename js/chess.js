@@ -22,6 +22,13 @@ class Chess {
     return piece.markup()
   }
 
+  getMarkupFor(pieceId) {
+    const piece = this._board.getPiece(pieceId)
+
+    return piece.markup()
+
+  }
+
   movePiece(x,y) {
     const pieceValue = this._board.move(this._lastID,x,y)
     this.updateScore(pieceValue)

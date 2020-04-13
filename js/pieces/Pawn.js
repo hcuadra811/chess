@@ -24,7 +24,7 @@ class Pawn extends Piece {
 
     get movePattern() {
         let pattern = [[0, 1 * this.direction]]
-        if(!this._moved) {
+        if(!this.moved) {
             pattern.push([0,2 * this.direction])
         }
         return pattern
