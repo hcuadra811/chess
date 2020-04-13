@@ -6,11 +6,20 @@ class Pawn extends Piece {
         super(id,color,x,y)
         this.name = 'Pawn'
         this.value = 1
-        this.captureMoves = [ [1,1*this.direction], [-1,1*this.direction] ]
+        this.capturePattern = [ [1,1*this.direction], [-1,1*this.direction] ]
+        this._captureMoves = []
     }
 
     markup() {
         return `<i class="fas fa-chess-pawn ${c.COLORSTR[this.color]}"></i>`
+    }
+
+    addCaptureMove(move) {
+        this._captureMoves.push(move)
+    }
+
+    get captureMoves() {
+        return this._captureMoves
     }
 
     get movePattern() {

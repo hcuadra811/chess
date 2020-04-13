@@ -7,6 +7,12 @@ class Position {
         this._name = PositionNames.getPositionName(x,y)
     }
 
+    setPosition(x,y) {
+        this._x = x
+        this._y = y
+        this._name = PositionNames.getPositionName(x,y)
+    }
+
     get x() {
         return this._x
     }
@@ -17,14 +23,6 @@ class Position {
 
     get name() {
         return this._name
-    }
-
-    set x(x) {
-        this._x = x
-    }
-
-    set y(y) {
-        this._y = y
     }
 }
 

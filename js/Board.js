@@ -21,16 +21,17 @@ class Board {
         Knight,
         Rook
     ]
-
-    _pieces = [
-        {},{}
-    ]
+    
+    _pieces = [{},{}]
+    
+    _cancelMovesFor = []
     
     constructor() {
         this.initializeBoard()
         this._inCheck = false
         this._isCheckMate = false
         this._isStaleMate = false
+        
     }
 
     initializeBoard() {   
@@ -72,7 +73,7 @@ class Board {
                 const current_slot = this.slots[x + y * this.MAX]
                 const newPiece = new piece(this.id,color,x,y)
                 current_slot.piece = newPiece
-                const newPieceKey = newPiece.name === 'King' ? newPiece.name : newPiece.name+newPiece.id
+                const newPieceKey = newPiece.name === 'King' ? newPiece.name : newPiece.name + newPiece.id
                 this._pieces[color][newPieceKey] = newPiece 
                 this.id++
             }
@@ -87,9 +88,10 @@ class Board {
             capturedPiece = destinationSlot.piece.value
         }
         destinationSlot.piece = slot.piece
-        slot.piece.move(x,y)
-        this._inCheck = this.isCheck(slot.piece)
+        slot.piece.move(x,y)      
         slot.empty()
+        this._inCheck = this.isCheck(destinationSlot.piece)
+        this._cancelMovesFor = []
         
         this.calculateMoves()
 
@@ -109,15 +111,14 @@ class Board {
 
         // Capturing the threat is a legal move
         attackingPath.push([threat.x,threat.y])
-           
-        for(let slot of this.slots) {
-            if(!slot.isEmpty() && slot.piece.color !== threat.color) {
-                if(slot.piece.name !== 'King') {
-                    slot.piece.moves = this.movesIn(slot.piece.moves,attackingPath)
-                } 
-                
-                opponentHasMoves = slot.piece.moves.length > 0 || opponentHasMoves
-            }
+        
+        const opponentPieces = this._pieces[this.opponentColor(threat)]
+        for(let pieceKey in opponentPieces) {
+            const piece = opponentPieces[pieceKey]
+            if(piece.name !== 'King') {
+                piece.moves = this.movesIn(piece.moves,attackingPath)
+            }       
+            opponentHasMoves = piece.moves.length > 0 || opponentHasMoves
         }
         
         return opponentHasMoves
@@ -134,16 +135,13 @@ class Board {
     }
 
     movesNotInOpponentPath(king) {
+        const opponentPieces = this._pieces[this.opponentColor(king)]
 
-        for(let slot of this.slots) {
-            if( !slot.isEmpty() &&  slot.piece.color !== king.color) {
-                let unnaceptableMoves = slot.piece.hasCaptureMoves() ? 
-                    slot.piece.captureMoves : slot.piece.moves
-
-                unnaceptableMoves = unnaceptableMoves.concat(slot.piece.blockers)
-
-                king.moves = this.movesNotIn(king.moves,unnaceptableMoves)
-            }
+        for(let pieceKey in opponentPieces) {
+            const piece = opponentPieces[pieceKey]
+            let unnaceptableMoves = piece.hasCaptureMoves() ? piece.captureMoves : piece.moves
+            unnaceptableMoves = unnaceptableMoves.concat(piece.blockers)
+            king.moves = this.movesNotIn(king.moves,unnaceptableMoves)
         }
     }
 
@@ -158,17 +156,17 @@ class Board {
 
     }
 
-    getAttackingPath(king,threat) {
+    getAttackingPath(piece,threat) {
         // You cannot block the path of a Pawn or a Knight
         if(threat.name === "Pawn" || threat.name === 'Knight') {
             return []
         }
 
-        const dirX = this.compare(threat.x,king.x)
-        const dirY = this.compare(threat.y,king.y)
+        const dirX = this.compare(threat.x,piece.x)
+        const dirY = this.compare(threat.y,piece.y)
 
-        let x = king.x + dirX
-        let y = king.y + dirY
+        let x = piece.x + dirX
+        let y = piece.y + dirY
         let attackingPath = []
 
         while(x !== threat.x || y !== threat.y) {
@@ -210,15 +208,38 @@ class Board {
 
 
     calculateMoves() {
-        for(let slot of this.slots) {
-            if(!slot.isEmpty()) {
-                this.calculateMovesForPiece(slot.piece)
-            }
+        this.calculateMovesFor(c.WHITE)
+        this.calculateMovesFor(c.BLACK)
+        this.cancelIllegalMoves()
+    }
+
+    cancelIllegalMoves() {
+        for(let cancelInfo of this._cancelMovesFor) {
+            const piecePosition = cancelInfo[0]
+            const attackingPath = cancelInfo[1]
+            const dX = piecePosition[0]
+            const dY = piecePosition[1]
+
+            const slot = this.slots[dX + dY * 8]
+
+            slot.piece.moves = this.movesIn(slot.piece.moves,attackingPath)
+
         }
     }
+
+    calculateMovesFor(color) {
+        const pieces = this._pieces[color]
+        for(let pieceKey in pieces) {
+            const piece = pieces[pieceKey]
+            this.calculateMovesForPiece(piece)
+        }
+    }
+
     calculateMovesForPiece(piece) {    
         piece.emptyMoves()
         piece.emptyBlockers()
+        piece.resetObstacles()
+
         if(piece.longRange) {
             this.calculateLongRangeMoves(piece)
         } else {
@@ -231,7 +252,7 @@ class Board {
     }
 
     calculateCaptureMoves(piece) {
-        for(let movePattern of piece.captureMoves) {
+        for(let movePattern of piece.capturePattern) {
             const dX = piece.x + movePattern[0]
             const dY = piece.y + movePattern[1]
             if(this.inRange(dX) && this.inRange(dY)) { 
@@ -239,6 +260,7 @@ class Board {
                     piece.addBlocker([dX,dY])
                 } else if(this.isOpponentPiece(piece,dX,dY)) {
                     piece.addMove([dX,dY])
+                    piece.addCaptureMove([dX,dY])
                 }
             }
         }
@@ -250,9 +272,9 @@ class Board {
             const dY = piece.y + movePattern[1]
             if(this.inRange(dX) && this.inRange(dY)) {  
                 // This is specifically for pawns which have special capture moves 
-                if(this.isOpponentPiece(piece,dX,dY) && piece.hasCaptureMoves()) continue   
+                if(this.isOpponentPiece(piece,dX,dY) && piece.hasCaptureMoves()) break   
 
-                if(this.isOwnPiece(piece,dX,dY)) {
+                if(this.isOwnPiece(piece,dX,dY) && !piece.hasCaptureMoves()) {
                     piece.addBlocker([dX,dY])
                 } else if(this.isLegalMove(piece,dX,dY)) {
                     piece.addMove([dX,dY])
@@ -270,20 +292,38 @@ class Board {
             const advanceX = movePattern[0]
             const advanceY = movePattern[1]     
             let dX = piece.x + advanceX
-            let dY = piece.y + advanceY
+            let dY = piece.y + advanceY          
+            let onlyBlockers = false
+            piece.resetObstacles()
 
             while(this.inRange(dX) && this.inRange(dY)) {
-                
-                if(this.isOwnPiece(piece,dX,dY)) {
+                if(onlyBlockers) {
                     piece.addBlocker([dX,dY])
-                    break
-                }
-                
-                if(this.isLegalMove(piece,dX,dY)) {
-                    piece.addMove([dX,dY])
+
+                    // There is only one obstacle between this piece and the opponent king
+                    // Therefore, the obstacle can't move from there
+                    if(this.isOpponentKing(piece,dX,dY) && piece.obstacles === 1) {
+                        const victim = this.slots[piece.lastTarget[0] + piece.lastTarget[1] * 8].piece
+                        this._cancelMovesFor.push([piece.lastTarget,this.getAttackingPath(victim,piece)])
+                    }
                     
-                    if(this.isOpponentPiece(piece,dX,dY)) {
+                    if(this.isOpponentPiece(piece,dX,dY)) piece.addObstacle()
+
+                    
+                } else {             
+                    if(this.isOwnPiece(piece,dX,dY)) {
+                        piece.addBlocker([dX,dY])
                         break
+                    }
+                    
+                    if(this.isLegalMove(piece,dX,dY)) {
+                        piece.addMove([dX,dY])
+                        
+                        if(this.isOpponentPiece(piece,dX,dY)) {
+                            piece.lastTarget = [dX,dY]
+                            piece.addObstacle()
+                            onlyBlockers = true
+                        }
                     }
                 }
                 dX += advanceX
@@ -297,6 +337,13 @@ class Board {
         const slot = this.slots[dX + dY * this.MAX] 
         
         return slot.isEmpty() ? false : slot.piece.color !== piece.color
+    }
+
+    isOpponentKing(piece,dX,dY) {       
+        const slot = this.slots[dX + dY * this.MAX] 
+        
+        return slot.isEmpty() ? false : slot.piece.color !== piece.color && slot.piece.name === 'King'
+
     }
 
     isOwnPiece(piece,dX,dY) {

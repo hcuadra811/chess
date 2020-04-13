@@ -12,8 +12,14 @@ class Piece {
         this._longRange = false
         this._moved = false
         this._value = 0
-        this._captureMoves = []
+        this._capturePattern = []
         this._blockers = []
+        this._obstacles = 0
+        this._lastTarget = 0
+    }
+
+    addObstacle() {
+        this._obstacles++;
     }
 
     addMove(move) {
@@ -34,20 +40,31 @@ class Piece {
 
     move(x,y) {
         this._moved = true
-        this.position.x = x
-        this.position.y = y
+        this.position.setPosition(x,y)
     }
 
     hasCaptureMoves() {
-        return this._captureMoves.length > 0
+        return this._capturePattern.length > 0
+    }
+
+    resetObstacles() {
+        this._obstacles = 0
+    }
+
+    get lastTarget() {
+        return this._lastTarget;
+    }
+
+    get obstacles() {
+        return this._obstacles
     }
 
     get blockers() {
         return this._blockers
     }
 
-    get captureMoves() {
-        return this._captureMoves;
+    get capturePattern() {
+        return this._capturePattern
     }
 
     get id() {
@@ -90,6 +107,10 @@ class Piece {
         return this._value
     }
 
+    set lastTarget(lastTarget) {
+        this._lastTarget = lastTarget
+    }
+
     set value(value) {
         this._value = value
     }
@@ -114,8 +135,8 @@ class Piece {
         this._longRange = longRange
     }
 
-    set captureMoves(captureMoves) {
-        this._captureMoves = captureMoves
+    set capturePattern(capturePattern) {
+        this._capturePattern = capturePattern
     }
 }
 
