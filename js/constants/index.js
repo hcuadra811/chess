@@ -2,6 +2,8 @@ export const WHITE = 0
 export const BLACK = 1
 export const COLORSTR = ['white','black']
 export const KING_INITIAL_X = 4
+export const WHITE_FIRST_ROW = 0
+export const BLACK_FIRST_ROW = 7
 // Distance from Rooks to King after Castle
 export const KING_ROOK_DISTANCE_RIGHT = 1
 export const KING_ROOK_DISTANCE_LEFT = -2

@@ -1,9 +1,10 @@
 body {
   font-family: "Oxanium", cursive;
   background: url(../img/circles-light.png);
+  margin:0;
 }
 
-h1 {
+h1,h2 {
   margin-top: 0;
 }
 
@@ -149,4 +150,67 @@ h1 {
   width:75px;
   font-weight: bold;
   font-size:22px;
+}
+
+.modal {
+  position: fixed;
+  display:none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 100%;
+  background: #ffffff;
+  z-index: 10000;
+  overflow: visible;
+  padding: 2rem;
+  width: 14%;
+  border: 2px solid black;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.modal.show {
+  display:block;
+}
+
+.promotion {
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.promotion .promotion-piece {
+  width:50%;
+  display:flex;
+  justify-content:center;
+}
+
+.promotion h2 {
+  margin:0 auto;
+}
+
+.promotion svg {
+  font-size:52px;
+  padding:1rem;
+  cursor:pointer;
+}
+
+.modal.white {
+  background:black;
+  border:2px solid white;
+}
+
+.modal h1,.modal h2 {
+  margin: 0 auto;
+}
+
+.white .promotion svg,.white .promotion h2 {
+  color:white;
+}
+
+.body-overlay.active {
+  background: rgba(0, 0, 0, 0.75);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
 }

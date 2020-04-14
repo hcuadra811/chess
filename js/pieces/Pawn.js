@@ -18,6 +18,10 @@ class Pawn extends Piece {
         this._captureMoves.push(move)
     }
 
+    emptyCaptureMoves() {
+        this._captureMoves = []
+    }
+
     get captureMoves() {
         return this._captureMoves
     }

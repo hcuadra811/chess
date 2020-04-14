@@ -39,6 +39,10 @@ class Chess {
     this._score[this._turn] += pieceValue
   }
 
+  promote(pawnPosition,selectedPiece) {
+    this._board.promote(pawnPosition,selectedPiece)
+  }
+
   get turnName() {
     return c.COLORSTR[this._turn]
   }

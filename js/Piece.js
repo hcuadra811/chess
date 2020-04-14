@@ -131,6 +131,10 @@ class Piece {
         this._moves = moves
     }
 
+    set moved(moved) {
+        this._moved = moved
+    }
+
     set board(board) {
         this._board = board
     }

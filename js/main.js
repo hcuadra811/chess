@@ -2,6 +2,7 @@ import Chess from './Chess.js'
 import * as c from './constants/index.js'
 
 let chess = new Chess()
+let pawnPromoted = []
 
 $(".cell").click(function() {
     console.log(chess.board)
@@ -24,6 +25,7 @@ $(".cell").click(function() {
         $(this).attr('piece_id',chess.lastID)
         
         additionalMove()
+        promotePawn()
         updateScore()
         eraseHighlights()
         changeTurn()
@@ -44,6 +46,35 @@ $(".cell").click(function() {
         }
     }
 })
+
+$('.promotion-piece').click(function(){
+    const selectedPiece = $('svg',this).attr('piece')
+    const x = pawnPromoted[0]
+    const y = pawnPromoted[1]
+    
+    const promotionColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
+    const colorClass = c.COLORSTR[promotionColor]
+
+    chess.promote(pawnPromoted,selectedPiece)
+    $('div[x='+x+'][y='+y+']').html(`<i class="${colorClass} fas fa-chess-${selectedPiece}"></i>`)
+    $('.modal').removeClass('show')
+    $('.body-overlay').removeClass('active')
+})
+
+function promotePawn() {
+    pawnPromoted = chess.board.pawnPromoted
+    
+    const promotionColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
+    const colorClass = c.COLORSTR[promotionColor]
+
+    if(pawnPromoted.length > 0) {
+        $('.modal').removeClass('white')
+        $('.modal').addClass(colorClass)
+        $('.modal svg').addClass(colorClass)
+        $('.modal').addClass('show')
+        $('.body-overlay').addClass('active')
+    }
+}
 
 function additionalMove() {
     const additionalMove = chess.board.additionalMove
@@ -73,7 +104,9 @@ function verifyCheckMate() {
         //Capitalize first letter
         winnerName = winnerName.charAt(0).toUpperCase() + winnerName.slice(1)
         setTimeout(function(){ 
-            alert(`Check Mate! ${winnerName} wins`)
+            $('.modal-content').html(`<h1>Check Mate!</h1> <h2>${winnerName} wins!</h2>`)
+            $('.modal').addClass('show')
+            $('.body-overlay').addClass('active')
         }, 200);
     }
 }
