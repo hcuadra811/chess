@@ -16,6 +16,7 @@ class Piece {
         this._blockers = []
         this._obstacles = 0
         this._lastTarget = 0
+        this._captureBlockers = []
     }
 
     addObstacle() {
@@ -30,8 +31,16 @@ class Piece {
         this._blockers.push(move)
     }
 
+    addCaptureBlocker(move) {
+        this._captureBlockers.push(move)
+    }
+
     emptyBlockers() {
         this._blockers = []
+    }
+
+    emptyCaptureBlockers() {
+        this._captureBlockers = []
     }
 
     emptyMoves() {
@@ -61,6 +70,10 @@ class Piece {
 
     get blockers() {
         return this._blockers
+    }
+    
+    get captureBlockers() {
+        return this._captureBlockers
     }
 
     get capturePattern() {

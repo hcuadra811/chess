@@ -22,6 +22,10 @@ class Slot {
         return this._position.y
     }
 
+    get positionName() {
+        return this._position.name
+    }
+
     isEmpty() {
         return this._empty
     }

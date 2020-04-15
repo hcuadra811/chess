@@ -17,6 +17,8 @@ $(".cell").click(function() {
 
         chess.movePiece(x,y)
 
+        $('#move-log').append(chess.lastMoveStr())
+
         $(this).html(
             chess.getMarkupForLastPiece()
         )

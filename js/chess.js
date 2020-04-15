@@ -43,6 +43,10 @@ class Chess {
     this._board.promote(pawnPosition,selectedPiece)
   }
 
+  lastMoveStr() {
+    return this._board.lastMoveStr
+  }
+
   get turnName() {
     return c.COLORSTR[this._turn]
   }

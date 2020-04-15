@@ -35,6 +35,8 @@ class Board {
     _additionalMove = []
     _pawnPromoted = []
     lastPieceMoved = 0
+    _lastMoveStr = ''
+    _kingCantVisit = []
     
     constructor() {
         this.initializeBoard()
@@ -95,6 +97,9 @@ class Board {
         const destinationSlot = this.slots[x + y * this.MAX]
         this._additionalMove = []
         this._pawnPromoted = []
+        this._kingCantVisit = []
+
+        this._lastMoveStr = this.logLastMove(slot,destinationSlot)
 
         let capturedPiece = 0
         if(!destinationSlot.isEmpty()) {
@@ -191,10 +196,11 @@ class Board {
 
         for(let pieceKey in opponentPieces) {
             const piece = opponentPieces[pieceKey]
-            let unnaceptableMoves = piece.hasCaptureMoves() ? piece.captureMoves : piece.moves
-            unnaceptableMoves = unnaceptableMoves.concat(piece.blockers)
+            let unnaceptableMoves = piece.hasCaptureMoves() ? piece.captureMoves.concat(piece.captureBlockers) : piece.moves
             king.moves = this.movesNotIn(king.moves,unnaceptableMoves)
         }
+
+        king.moves = this.movesNotIn(king.moves,this._kingCantVisit)
     }
 
     movesNotIn(pieceMoves,unacceptableMoves) {
@@ -264,6 +270,9 @@ class Board {
     calculateMoves() {
         this.calculateMovesFor(c.WHITE)
         this.calculateMovesFor(c.BLACK)
+        //Recalculate moves for white king 
+        this.calculateMovesForPiece(this._pieces[c.WHITE]['King'])
+        // Cancel moves that leave the king unprotected
         this.cancelIllegalMoves()
 
         if(this.inCheck()) {
@@ -311,12 +320,14 @@ class Board {
 
     calculateCaptureMoves(piece) {
         piece.emptyCaptureMoves()
+        piece.emptyCaptureBlockers()
+
         for(let movePattern of piece.capturePattern) {
             const dX = piece.x + movePattern[0]
             const dY = piece.y + movePattern[1]
             if(this.inRange(dX) && this.inRange(dY)) { 
                 if(this.isOwnPiece(piece,dX,dY) || this.isEmptySlot(dX,dY)) {
-                    piece.addBlocker([dX,dY])
+                    piece.addCaptureBlocker([dX,dY])
                 } else if(this.isOpponentPiece(piece,dX,dY)) {
                     piece.addMove([dX,dY])
                     piece.addCaptureMove([dX,dY])
@@ -341,11 +352,6 @@ class Board {
                     piece.addMove([dX,dY])
                 }
             }
-        }
-        
-        if(piece.name === 'King') {
-            this.calculateCastle(piece)
-            this.movesNotInOpponentPath(piece)
         }
     }
 
@@ -393,12 +399,15 @@ class Board {
             let dX = piece.x + advanceX
             let dY = piece.y + advanceY          
             let onlyBlockers = false
+            let illegalKingMoves = false
             piece.resetObstacles()
 
             while(this.inRange(dX) && this.inRange(dY)) {
                 if(onlyBlockers) {
                     piece.addBlocker([dX,dY])
-
+                    if(illegalKingMoves) {
+                        this._kingCantVisit.push([dX,dY])
+                    }
                     // There is only one obstacle between this piece and the opponent king
                     // Therefore, the obstacle can't move from there
                     if(this.isOpponentKing(piece,dX,dY) && piece.obstacles === 1) {
@@ -412,6 +421,7 @@ class Board {
                 } else {             
                     if(this.isOwnPiece(piece,dX,dY)) {
                         piece.addBlocker([dX,dY])
+                        this._kingCantVisit.push([dX,dY])
                         break
                     }
                     
@@ -422,6 +432,7 @@ class Board {
                             piece.lastTarget = [dX,dY]
                             piece.addObstacle()
                             onlyBlockers = true
+                            illegalKingMoves = this.isOpponentKing(piece,dX,dY)
                         }
                     }
                 }
@@ -490,6 +501,15 @@ class Board {
 
     get pawnPromoted() {
         return this._pawnPromoted
+    }
+
+    get lastMoveStr() {
+        return this._lastMoveStr
+    }
+
+    logLastMove(slot,destinationSlot) {
+        const lastMove =  `${c.COLORSTR[slot.piece.color]} ${slot.piece.name} moved from ${slot.positionName} to ${destinationSlot.positionName} <br>`
+        return lastMove
     }
 }
 
