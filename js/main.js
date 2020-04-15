@@ -4,7 +4,7 @@ import * as c from './constants/index.js'
 let chess = new Chess()
 let pawnPromoted = []
 
-$(".cell").click(function() {
+$(".cell").on('click',function() {
     console.log(chess.board)
     if($(this).hasClass('target-move')) {
         const x = parseInt($(this).attr('x'))
@@ -49,7 +49,7 @@ $(".cell").click(function() {
     }
 })
 
-$('.promotion-piece').click(function(){
+$('.promotion-piece').on('click',function(){
     const selectedPiece = $('svg',this).attr('piece')
     const x = pawnPromoted[0]
     const y = pawnPromoted[1]
