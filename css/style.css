@@ -127,6 +127,7 @@ h1,h2 {
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .row-label {
@@ -214,3 +215,79 @@ h1,h2 {
   height: 100%;
   top: 0;
 }
+
+@media only screen and (max-width: 600px) {
+  h1 {
+    font-size: 25px;
+  }
+
+  .container {
+    width:100%;
+    padding:0;
+  }
+  
+  .header {
+    padding:13px;
+  }
+
+  .score svg {
+      font-size: 20px;
+  }
+  .score .number {
+    font-size: 15px;
+  }
+
+  .board-wrapper {
+    margin-left: 6px;
+  }
+
+  .row-label {
+    height: 42px;
+    width: 18px;
+    font-size: 15px;
+  }
+
+  .board {
+    width: 336px;
+  }
+
+  .cell {
+    height: 42px;
+  }
+
+  .cell svg {
+    font-size: 31px;
+  }
+
+  .arrow svg {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+
+  .scoreboard {
+    width:96px;
+  }
+
+  .scoreboard .arrow {
+    right:7px;
+  }
+
+  .column-labels {
+    margin-left: 24px;
+  }
+
+  .column-label {
+    width: 42px;
+    font-size: 15px;
+  }
+
+  .cell svg.turn:hover {
+    font-size: 34px;
+  }
+
+  .cell .fa-circle {
+    font-size:13px;
+  }
+
+  
+ }
