@@ -39,6 +39,11 @@ h1,h2 {
   justify-content: center;
   align-items: center;
   position:relative;
+  border:none;
+}
+
+.cell:focus {
+  outline:none;
 }
 
 .cell svg {

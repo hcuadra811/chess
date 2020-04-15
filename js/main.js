@@ -3,64 +3,66 @@ import * as c from './constants/index.js'
 
 let chess = new Chess()
 let pawnPromoted = []
-
-$(".cell").on('click',function() {
-    console.log(chess.board)
-    if($(this).hasClass('target-move')) {
-        const x = parseInt($(this).attr('x'))
-        const y = parseInt($(this).attr('y'))
-
-        const lastPosition = $('div[piece_id='+chess.lastID+']')
-
-        lastPosition.html('')
-        lastPosition.attr('piece_id','0')
-
-        chess.movePiece(x,y)
-
-        $('#move-log').append(chess.lastMoveStr())
-
-        $(this).html(
-            chess.getMarkupForLastPiece()
-        )
-
-        $(this).removeClass('target-move')
-        $(this).attr('piece_id',chess.lastID)
-        
-        additionalMove()
-        promotePawn()
-        updateScore()
-        eraseHighlights()
-        changeTurn()
-        verifyCheckMate()
-
-    } else {    
-        const wasExpanded = $(this).hasClass('expanded')
-        const isTurn = $('svg',this).hasClass('turn') 
-
-        $(".cell").removeClass("expanded")
-        eraseHighlights()
-
-        if(!wasExpanded && isTurn) {
-            $(this).addClass("expanded")
-            const id = $(this).attr('piece_id')
-            chess.lastID = id
-            highlightMoves(chess.getMovesFrom(id))
-        }
-    }
-})
-
-$('.promotion-piece').on('click',function(){
-    const selectedPiece = $('svg',this).attr('piece')
-    const x = pawnPromoted[0]
-    const y = pawnPromoted[1]
+$(document).ready(function(){
     
-    const promotionColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
-    const colorClass = c.COLORSTR[promotionColor]
+    $(".cell").on('click',function() {
+        console.log(chess.board)
+        if($(this).hasClass('target-move')) {
+            const x = parseInt($(this).attr('x'))
+            const y = parseInt($(this).attr('y'))
 
-    chess.promote(pawnPromoted,selectedPiece)
-    $('div[x='+x+'][y='+y+']').html(`<i class="${colorClass} fas fa-chess-${selectedPiece}"></i>`)
-    $('.modal').removeClass('show')
-    $('.body-overlay').removeClass('active')
+            const lastPosition = $('button[piece_id='+chess.lastID+']')
+
+            lastPosition.html('')
+            lastPosition.attr('piece_id','0')
+
+            chess.movePiece(x,y)
+
+            $('#move-log').append(chess.lastMoveStr())
+
+            $(this).html(
+                chess.getMarkupForLastPiece()
+            )
+
+            $(this).removeClass('target-move')
+            $(this).attr('piece_id',chess.lastID)
+            
+            additionalMove()
+            promotePawn()
+            updateScore()
+            eraseHighlights()
+            changeTurn()
+            verifyCheckMate()
+
+        } else {    
+            const wasExpanded = $(this).hasClass('expanded')
+            const isTurn = $('svg',this).hasClass('turn') 
+
+            $(".cell").removeClass("expanded")
+            eraseHighlights()
+
+            if(!wasExpanded && isTurn) {
+                $(this).addClass("expanded")
+                const id = $(this).attr('piece_id')
+                chess.lastID = id
+                highlightMoves(chess.getMovesFrom(id))
+            }
+        }
+    })
+
+    $('.promotion-piece').on('click',function(){
+        const selectedPiece = $('svg',this).attr('piece')
+        const x = pawnPromoted[0]
+        const y = pawnPromoted[1]
+        
+        const promotionColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
+        const colorClass = c.COLORSTR[promotionColor]
+
+        chess.promote(pawnPromoted,selectedPiece)
+        $('button[x='+x+'][y='+y+']').html(`<i class="${colorClass} fas fa-chess-${selectedPiece}"></i>`)
+        $('.modal').removeClass('show')
+        $('.body-overlay').removeClass('active')
+    })
 })
 
 function promotePawn() {
@@ -134,7 +136,7 @@ function highlightMoves(moves) {
     for(let move of moves) {
         const x = move[0]
         const y = move[1]
-        const targetMove = $('div[x='+x+'][y='+y+']')
+        const targetMove = $('button[x='+x+'][y='+y+']')
         targetMove.append(
             '<i class="fas fa-circle"></i>'
         )
