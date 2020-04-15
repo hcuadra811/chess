@@ -3,66 +3,64 @@ import * as c from './constants/index.js'
 
 let chess = new Chess()
 let pawnPromoted = []
-$(document).ready(function(){
-    
-    $(".cell").on('click',function() {
-        console.log(chess.board)
-        if($(this).hasClass('target-move')) {
-            const x = parseInt($(this).attr('x'))
-            const y = parseInt($(this).attr('y'))
 
-            const lastPosition = $('button[piece_id='+chess.lastID+']')
+$(".cell").click(function() {
+    console.log(chess.board)
+    if($(this).hasClass('target-move')) {
+        const x = parseInt($(this).attr('x'))
+        const y = parseInt($(this).attr('y'))
 
-            lastPosition.html('')
-            lastPosition.attr('piece_id','0')
+        const lastPosition = $('div[piece_id='+chess.lastID+']')
 
-            chess.movePiece(x,y)
+        lastPosition.html('')
+        lastPosition.attr('piece_id','0')
 
-            $('#move-log').append(chess.lastMoveStr())
+        chess.movePiece(x,y)
 
-            $(this).html(
-                chess.getMarkupForLastPiece()
-            )
+        $('#move-log').append(chess.lastMoveStr())
 
-            $(this).removeClass('target-move')
-            $(this).attr('piece_id',chess.lastID)
-            
-            additionalMove()
-            promotePawn()
-            updateScore()
-            eraseHighlights()
-            changeTurn()
-            verifyCheckMate()
+        $(this).html(
+            chess.getMarkupForLastPiece()
+        )
 
-        } else {    
-            const wasExpanded = $(this).hasClass('expanded')
-            const isTurn = $('svg',this).hasClass('turn') 
-
-            $(".cell").removeClass("expanded")
-            eraseHighlights()
-
-            if(!wasExpanded && isTurn) {
-                $(this).addClass("expanded")
-                const id = $(this).attr('piece_id')
-                chess.lastID = id
-                highlightMoves(chess.getMovesFrom(id))
-            }
-        }
-    })
-
-    $('.promotion-piece').on('click',function(){
-        const selectedPiece = $('svg',this).attr('piece')
-        const x = pawnPromoted[0]
-        const y = pawnPromoted[1]
+        $(this).removeClass('target-move')
+        $(this).attr('piece_id',chess.lastID)
         
-        const promotionColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
-        const colorClass = c.COLORSTR[promotionColor]
+        additionalMove()
+        promotePawn()
+        updateScore()
+        eraseHighlights()
+        changeTurn()
+        verifyCheckMate()
 
-        chess.promote(pawnPromoted,selectedPiece)
-        $('button[x='+x+'][y='+y+']').html(`<i class="${colorClass} fas fa-chess-${selectedPiece}"></i>`)
-        $('.modal').removeClass('show')
-        $('.body-overlay').removeClass('active')
-    })
+    } else {    
+        const wasExpanded = $(this).hasClass('expanded')
+        const isTurn = $('svg',this).hasClass('turn') 
+
+        $(".cell").removeClass("expanded")
+        eraseHighlights()
+
+        if(!wasExpanded && isTurn) {
+            $(this).addClass("expanded")
+            const id = $(this).attr('piece_id')
+            chess.lastID = id
+            highlightMoves(chess.getMovesFrom(id))
+        }
+    }
+})
+
+$('.promotion-piece').click(function(){
+    const selectedPiece = $('svg',this).attr('piece')
+    const x = pawnPromoted[0]
+    const y = pawnPromoted[1]
+    
+    const promotionColor = chess.turn === c.WHITE ? c.BLACK:c.WHITE
+    const colorClass = c.COLORSTR[promotionColor]
+
+    chess.promote(pawnPromoted,selectedPiece)
+    $('div[x='+x+'][y='+y+']').html(`<i class="${colorClass} fas fa-chess-${selectedPiece}"></i>`)
+    $('.modal').removeClass('show')
+    $('.body-overlay').removeClass('active')
 })
 
 function promotePawn() {
@@ -136,7 +134,7 @@ function highlightMoves(moves) {
     for(let move of moves) {
         const x = move[0]
         const y = move[1]
-        const targetMove = $('button[x='+x+'][y='+y+']')
+        const targetMove = $('div[x='+x+'][y='+y+']')
         targetMove.append(
             '<i class="fas fa-circle"></i>'
         )
