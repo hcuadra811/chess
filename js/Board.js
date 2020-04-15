@@ -353,6 +353,11 @@ class Board {
                 }
             }
         }
+        
+        if(piece.name === 'King') {
+            this.calculateCastle(piece)
+            this.movesNotInOpponentPath(piece)
+        }
     }
 
     calculateCastle(king) {
