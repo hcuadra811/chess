@@ -1,5 +1,5 @@
 import Piece from '../Piece.js'
-import * as c from '../constants/index.js'
+import * as c from '../constant/index.js'
 
 class Rook extends Piece {
     constructor(id,color,x,y) {

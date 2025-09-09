@@ -1,5 +1,5 @@
 import Board from './Board.js'
-import * as c from './constants/index.js'
+import * as c from './constant/index.js'
 
 class Chess {
 

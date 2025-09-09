@@ -1,0 +1,199 @@
+/* Font Awesome CDN */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+body {
+  font-family: "Oxanium", cursive;
+  margin: 0;
+  background: #f0f0f0;
+}
+
+h1, h2 {
+  margin-top: 0;
+}
+
+.chess-game {
+  padding: 1rem 4rem;
+  width: 600px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.board-wrapper {
+  display: flex;
+}
+
+.row-labels {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-label {
+  height: 75px;
+  display: flex;
+  align-items: center;
+  width: 25px;
+  font-weight: bold;
+  font-size: 22px;
+  justify-content: center;
+}
+
+.chess-board {
+  width: 600px;
+  box-shadow: 1px 1px 8px 0px black;
+}
+
+.chess-row {
+  display: flex;
+}
+
+.chess-cell {
+  width: 12.5%;
+  background: #e6ccab;
+  height: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: none;
+  cursor: pointer;
+}
+
+.chess-cell.dark {
+  background: #9d571b;
+}
+
+.chess-cell.selected {
+  background: #e8e699;
+}
+
+/* Fix: Proper piece sizing like your original */
+.chess-cell i {
+  font-size: 52px !important;
+  transition: font-size 0.25s;
+}
+
+.chess-cell i.turn {
+  cursor: pointer;
+}
+
+.chess-cell.selected i {
+  font-size: 62px !important;
+}
+
+.chess-cell:hover i.turn {
+  font-size: 62px !important;
+}
+
+/* Fix: Proper piece colors */
+.chess-cell i.white {
+  color: #fffdfb !important;
+  text-shadow: 0 0 3px #000;
+}
+
+.chess-cell i.black {
+  color: #333 !important;
+}
+
+.move-indicator {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.chess-cell.valid-move {
+  cursor: pointer;
+}
+
+/* Fix: Column labels positioning */
+.column-labels {
+  display: flex;
+  margin-top: 10px;
+  margin-left: 25px;
+}
+
+.column-label {
+  display: flex;
+  justify-content: center;
+  width: 75px;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+/* Scoreboard styles */
+.scoreboard {
+  display: flex;
+  width: 160px;
+  background: #cecece;
+  box-shadow: 1px 1px 4px 0px #868686;
+  border-radius: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 5px;
+}
+
+.scoreboard div {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-top: 5px;
+}
+
+.score i {
+  font-size: 1.5em;
+}
+
+.score .number {
+  font-size: 18px;
+  padding-left: 5px;
+  position: relative;
+  top: 4px;
+  left: 3px;
+}
+
+.score.white i {
+  color: white;
+}
+
+.arrow {
+  position: relative;
+  right: 9px;
+}
+
+/* Mobile responsive */
+@media only screen and (max-width: 600px) {
+  .chess-game {
+    width: 100%;
+    padding: 0 13px;
+  }
+  
+  .chess-board {
+    width: 336px;
+  }
+  
+  .chess-cell {
+    height: 42px;
+  }
+  
+  .chess-cell i {
+    font-size: 31px !important;
+  }
+  
+  .row-label {
+    height: 42px;
+    width: 18px;
+    font-size: 15px;
+  }
+  
+  .column-label {
+    width: 42px;
+    font-size: 15px;
+  }
+}

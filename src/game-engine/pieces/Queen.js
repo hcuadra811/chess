@@ -1,14 +1,16 @@
 import Piece from '../Piece.js'
-import * as c from '../constants/index.js'
+import * as c from '../constant/index.js'
 
-class King extends Piece {
+class Queen extends Piece {
     constructor(id,color,x,y) {
         super(id,color,x,y)
-        this.name = 'King'
+        this.name = 'Queen'
+        this.longRange = true
+        this.value = 7
     }
 
     markup() {
-        return `<i class="fas fa-chess-king ${c.COLORSTR[this.color]}"></i>`
+        return `<i class="fas fa-chess-queen ${c.COLORSTR[this.color]}"></i>`
     }
 
     get movePattern() {
@@ -20,4 +22,4 @@ class King extends Piece {
     }
 }
 
-export default King
+export default Queen
