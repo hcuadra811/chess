@@ -8,23 +8,26 @@ import * as c from '../game-engine/constant/index';
 const ChessBoard = () => {
   const { gameState, selectPiece, movePiece, promotePawn, resetGame } = useChessGame();
 
-  const handleCellClick = (x, y, slot) => {
-    const pieceId = slot.isEmpty() ? null : slot.piece.id;
-    
-    // Check if this is a valid move
-    const isValidMove = gameState.validMoves.some(move => move[0] === x && move[1] === y);
-    
-    if (isValidMove) {
-      // Make the move
-      movePiece(x, y);
-    } else if (pieceId && slot.piece.color === gameState.turn) {
-      // Select piece if it's the current player's piece
-      selectPiece(pieceId);
-    } else {
-      // Clear selection if clicking elsewhere
-      selectPiece(null);
-    }
-  };
+ const handleCellClick = (x, y, slot) => {
+  const pieceId = slot.isEmpty() ? null : slot.piece.id;
+  
+  // Check if this is a valid move
+  const isValidMove = gameState.validMoves.some(move => move[0] === x && move[1] === y);
+  
+  if (isValidMove) {
+    // Make the move
+    movePiece(x, y);
+    // CRITICAL FIX: Clear selection immediately after move
+    selectPiece(null);
+  } else if (pieceId && slot.piece.color === gameState.turn) {
+    // Select piece if it's the current player's piece
+    selectPiece(pieceId);
+  } else {
+    // Clear selection if clicking elsewhere
+    selectPiece(null);
+  }
+};
+
 
   const renderBoard = () => {
     const board = [];

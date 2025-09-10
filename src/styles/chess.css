@@ -4,8 +4,8 @@
 body {
   font-family: "Oxanium", cursive;
   margin: 0;
-  background: #f0f0f0;
-}
+  background: url(../../img/circles-light.png);
+}s
 
 h1, h2 {
   margin-top: 0;
