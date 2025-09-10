@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useChessGame } from '../hooks/useChessGame';
 import ChessCell from './ChessCell';
 import ScoreBoard from './ScoreBoard';
@@ -7,6 +7,26 @@ import * as c from '../game-engine/constant/index';
 
 const ChessBoard = () => {
   const { gameState, selectPiece, movePiece, promotePawn, resetGame, chess } = useChessGame();
+  const [showCheckNotification, setShowCheckNotification] = useState(false);
+
+  // Handle check notification with auto-hide timeout
+  useEffect(() => {
+    const isInCheck = chess.board && chess.board.inCheck && chess.board.inCheck() && 
+                     chess.board.isCheckMate && !chess.board.isCheckMate();
+    
+    if (isInCheck) {
+      setShowCheckNotification(true);
+      
+      // Hide notification after 3 seconds
+      const timer = setTimeout(() => {
+        setShowCheckNotification(false);
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    } else {
+      setShowCheckNotification(false);
+    }
+  }, [gameState.inCheck, gameState.isCheckMate, chess.board]);
 
   const handleCellClick = (x, y, slot) => {
     const pieceId = slot.isEmpty() ? null : slot.piece.id;
@@ -126,21 +146,26 @@ const ChessBoard = () => {
         </div>
       )}
 
-      {/* Check notification - Add null checks */}
-      {chess.board && chess.board.inCheck && chess.board.inCheck() && 
-       chess.board.isCheckMate && !chess.board.isCheckMate() && (
-        <div className="check-notification" style={{
+      {/* Check notification with auto-hide after 3 seconds */}
+      {showCheckNotification && (
+        <div style={{
           position: 'fixed',
-          top: '100px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'orange',
+          top: '20px',
+          right: '20px',
+          background: 'rgba(255, 0, 0, 0.9)',
           color: 'white',
-          padding: '10px 20px',
-          borderRadius: '5px',
-          zIndex: 1000
+          padding: '12px 20px',
+          borderRadius: '6px',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          zIndex: 1000,
+          border: '2px solid white',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+          animation: 'fadeIn 0.3s ease-in'
         }}>
-          <p>{c.COLORSTR[gameState.turn]} King is in Check!</p>
+          <p style={{ margin: 0 }}>
+            {c.COLORSTR[gameState.turn].toUpperCase()} King is in Check!
+          </p>
         </div>
       )}
     </div>
