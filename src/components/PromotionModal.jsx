@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import * as c from '../game-engine/constant/index';
 
 const PromotionModal = ({ turn, onPromote }) => {
-  console.log('PromotionModal rendering, turn:', turn);
-  
+ 
   const promotionColor = turn === c.WHITE ? c.BLACK : c.WHITE;
   const colorClass = c.COLORSTR[promotionColor];
 
@@ -12,7 +11,7 @@ const PromotionModal = ({ turn, onPromote }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const handlePieceSelect = (piece) => {
-    console.log('Piece selected for promotion:', piece);
+    
     onPromote(piece);
 
     setIsVisible(false);

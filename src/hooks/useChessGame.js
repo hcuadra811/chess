@@ -31,16 +31,13 @@ export const useChessGame = () => {
     });
   }, [chess]);
 
-  // Initialize gameState on mount
+ 
   useEffect(() => {
     updateGameState();
   }, [updateGameState]);
 
   const selectPiece = useCallback((pieceId) => {
     if (pieceId) {
-      // Debug check moves during check
-      console.log('Selecting piece:', pieceId);
-      console.log('In check:', chess.board.inCheck());
       const moves = chess.getMovesFrom(pieceId);
       console.log('Valid moves for piece:', moves);
     }
@@ -58,7 +55,7 @@ export const useChessGame = () => {
   }, [chess, updateGameState]);
 
   const promotePawn = useCallback((pawnPosition, selectedPiece) => {
-    console.log('Promoting pawn at:', pawnPosition, 'to:', selectedPiece);
+
     chess.promote(pawnPosition, selectedPiece);
     updateGameState();
   }, [chess, updateGameState]);

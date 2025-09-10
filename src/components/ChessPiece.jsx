@@ -14,7 +14,6 @@ const ChessPiece = ({ piece, isTurn = false }) => {
       'Pawn': 'fas fa-chess-pawn'
     };
     
-    // Fix: WHITE = 0 should show as 'white', BLACK = 1 should show as 'black'
     const colorClass = piece.color === c.WHITE ? 'white' : 'black';
     const turnClass = isTurn ? 'turn' : '';
     

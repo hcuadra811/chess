@@ -16,7 +16,7 @@ const ScoreBoard = ({ score, turn }) => {
         <i className="fas fa-chevron-up"></i>
       </div>
       <div className="arrow">
-        {/* Empty arrow for non-active player */}
+
       </div>
     </div>
   );

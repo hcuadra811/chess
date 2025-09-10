@@ -10,7 +10,7 @@ const CheckNotification = ({ isInCheck, currentTurn, isCheckMate }) => {
     if (shouldShow) {
       setVisible(true);
       
-      // Auto-hide after 3 seconds
+     
       const timer = setTimeout(() => {
         setVisible(false);
       }, 3000);
