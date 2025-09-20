@@ -1,5 +1,5 @@
 import Position from './Position.js'
-import * as c from './constants/index.js'
+import * as c from './constant/index.js'
 
 class Piece {
 

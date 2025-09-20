@@ -5,7 +5,7 @@ import Bishop from './pieces/Bishop.js'
 import Queen from './pieces/Queen.js'
 import King from './pieces/King.js'
 import Pawn from './pieces/Pawn.js'
-import * as c from './constants/index.js'
+import * as c from './constant/index.js'
 
 class Board {
     id = 1
